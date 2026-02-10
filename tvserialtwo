@@ -1,0 +1,12 @@
+# Extracts TV series with their main subjects and release years (start/end).
+# Извлекает телесериалы с их основными темами и годами выхода (начало/конец).
+SELECT DISTINCT ?tv_series ?tv_seriesLabel ?start_year ?end_year ?subjectLabel
+WHERE {
+  ?tv_series wdt:P31 wd:Q5398426; # телесериал
+             wdt:P921 ?subject.   # основная тема/предмет
+  
+  OPTIONAL { ?tv_series wdt:P580 ?start_date. BIND(YEAR(?start_date) AS ?start_year) } # дата начала
+  OPTIONAL { ?tv_series wdt:P582 ?end_date. BIND(YEAR(?end_date) AS ?end_year) } # дата окончания
+  
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "ru,en" }
+}
