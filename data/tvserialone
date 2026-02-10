@@ -1,0 +1,13 @@
+# Extracts TV series with release years (start/end) and names of awards they were nominated for.
+# Извлекает телесериалы с годами выхода (начало/конец) и названиями премий, на которые они номинировались.
+SELECT DISTINCT ?tv_series ?tv_seriesLabel ?start_year ?end_year ?awardLabel ?subjectLabel
+WHERE {
+  ?tv_series wdt:P31 wd:Q5398426; # телесериал
+             wdt:P1411 ?award.    # номинация на премию
+  
+  OPTIONAL { ?tv_series wdt:P580 ?start_date. BIND(YEAR(?start_date) AS ?start_year) } # дата начала
+  OPTIONAL { ?tv_series wdt:P582 ?end_date. BIND(YEAR(?end_date) AS ?end_year) } # дата окончания
+  OPTIONAL { ?tv_series wdt:P921 ?subject. } # основная тема/предмет
+  
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "ru,en" }
+}
