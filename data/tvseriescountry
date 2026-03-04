@@ -1,0 +1,15 @@
+# Extracts TV series with country, filtered to those having at least award nomination OR main subject.
+# Извлекает телесериалы со страной — только те, у которых есть хотя бы номинация на премию ИЛИ основная тема.
+SELECT DISTINCT ?tv_series ?tv_seriesLabel ?countryLabel
+WHERE {
+  ?tv_series wdt:P31 wd:Q5398426;  # телесериал
+             wdt:P495 ?country.    # страна производства
+
+  FILTER(
+    EXISTS { ?tv_series wdt:P1411 []. }  # есть номинация
+    ||
+    EXISTS { ?tv_series wdt:P921 []. }   # или есть тема
+  )
+
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "ru,en" }
+}
